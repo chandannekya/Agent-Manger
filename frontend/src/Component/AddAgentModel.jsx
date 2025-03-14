@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import React from "react";
 import CSVUpload from "./CSVUpload";
-import AddAgentForm from "./AddAgentForm";
+import AddAgentForm from "./AddAgentForm.jsx";
 export const AddAgentModal = () => {
   const navigate = useNavigate();
   const location = useLocation();
