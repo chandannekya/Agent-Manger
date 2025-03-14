@@ -10,7 +10,7 @@ export const signIn = async (email, password, navigate) => {
 
   try {
     const response = await axios.post(SIGNIN_API, { email, password });
-    const now = new Date();
+
     // Save token and show success message
     const { token } = response.data;
 
