@@ -30,7 +30,7 @@ const Dashboard = () => {
   }, [location, navigate]);
   const handleLogout = () => {
     localStorage.setItem("token", "");
-    navigate("/");
+    window.location.reload();
   };
 
   return (
