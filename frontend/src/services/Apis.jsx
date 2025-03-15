@@ -1,5 +1,5 @@
 // const BASE_URL = import.meta.env.VITE_BASE_URL;
-const BASE_URL = "https://agent-manger-8l4w.vercel.app/";
+const BASE_URL = "https://agent-manger-8l4w.vercel.app";
 
 export const authEndpoits = {
   SIGNUP_API: `${BASE_URL}/api/auth/signUp`,
