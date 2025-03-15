@@ -7,7 +7,7 @@ const xlsx = require("xlsx");
 
 // Simple multer setup without disk storage configuration
 const upload = multer({
-  dest: "uploads/",
+  storage: multer.memoryStorage(), // Store file in memory instead of disk
   fileFilter: (req, file, cb) => {
     if (
       file.mimetype === "text/csv" ||
