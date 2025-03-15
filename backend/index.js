@@ -13,12 +13,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: "*", // ✅ Add frontend URL
+    origin: ["https://agent-manger.vercel.app", "http://localhost:5173"], // ✅ Replace "*" with actual domains
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true, // ✅ Important for cookies or tokens
+    credentials: true, // ✅ Required for cookies or authentication tokens
   })
 );
+
+// ✅ Handle preflight requests
+app.options("*", cors());
 
 databaseConnection();
 app.use("/api/auth", authRoutes);
