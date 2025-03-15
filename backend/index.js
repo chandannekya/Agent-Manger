@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: ["https://agent-manger.vercel.app", "http://localhost:5173"], // ✅ Add frontend URL
+    origin: "*", // ✅ Add frontend URL
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true, // ✅ Important for cookies or tokens
