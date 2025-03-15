@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 const { SIGNIN_API, SIGNUP_API } = authEndpoits;
 
-export const signIn = async (email, password, navigate) => {
+export const signIn = async (email, password, navigate, setIsAuthenticated) => {
   // Show loading toast
   const toastId = toast.loading("Processing...");
 
@@ -15,6 +15,7 @@ export const signIn = async (email, password, navigate) => {
     const { token } = response.data;
 
     localStorage.setItem("token", token);
+    setIsAuthenticated(true);
 
     toast.success("LogIn Successfully", { id: toastId });
     navigate("/");

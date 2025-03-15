@@ -29,7 +29,10 @@ function App() {
           element={isAuthenticated ? <Dashboard /> : <HeroSection />}
         />
         <Route path="/signup" element={<SignUpForm />} />
-        <Route path="/signin" element={<SignInForm />} />
+        <Route
+          path="/signin"
+          element={<SignInForm setIsAuthenticated={setIsAuthenticated} />}
+        />
       </Routes>
     </>
   );

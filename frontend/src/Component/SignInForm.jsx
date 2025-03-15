@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { signIn } from "../services/oprations/auth";
 import { useNavigate } from "react-router-dom";
-const SignInForm = () => {
+const SignInForm = ({ setIsAuthenticated }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -17,7 +17,7 @@ const SignInForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    signIn(formData.email, formData.password, navigate);
+    signIn(formData.email, formData.password, navigate, setIsAuthenticated);
   };
 
   return (
