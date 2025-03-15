@@ -4,10 +4,10 @@ const Task = require("../models/task");
 const csv = require("csv-parser");
 const multer = require("multer");
 const xlsx = require("xlsx");
+const { Readable } = require("stream");
 
-// Simple multer setup without disk storage configuration
 const upload = multer({
-  storage: multer.memoryStorage(), // Store file in memory instead of disk
+  storage: multer.memoryStorage(),
   fileFilter: (req, file, cb) => {
     if (
       file.mimetype === "text/csv" ||
@@ -46,17 +46,13 @@ const TaskUpload = async (req, res) => {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const filePath = req.file.path;
-
-    // Create directory if it doesn't exist
-    if (!fs.existsSync("uploads")) {
-      fs.mkdirSync("uploads");
-    }
-
     const data = [];
 
+    // Process CSV files
     if (req.file.mimetype === "text/csv") {
-      fs.createReadStream(filePath)
+      const stream = Readable.from(req.file.buffer.toString());
+
+      stream
         .pipe(csv())
         .on("data", (row) => {
           data.push(row);
@@ -65,7 +61,6 @@ const TaskUpload = async (req, res) => {
           try {
             console.log("CSV data:", data);
             await processAndSaveData(data);
-            fs.unlinkSync(filePath);
             res.json({ message: "Data processed successfully" });
           } catch (error) {
             res.status(500).json({ message: error.message });
@@ -75,14 +70,14 @@ const TaskUpload = async (req, res) => {
           res.status(500).json({ message: error.message });
         });
     } else {
-      const workbook = xlsx.readFile(filePath);
+      // Process Excel files
+      const workbook = xlsx.read(req.file.buffer, { type: "buffer" });
       const sheetName = workbook.SheetNames[0];
       const sheetData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
       try {
         console.log("Excel data:", sheetData);
         await processAndSaveData(sheetData);
-        fs.unlinkSync(filePath);
         res.json({ message: "Data processed successfully" });
       } catch (error) {
         res.status(500).json({ message: error.message });
@@ -97,8 +92,6 @@ const TaskAssign = async (req, res) => {
   try {
     const tasks = await Task.find({ agentId: null });
     const agents = await Agent.find({});
-    console.log(tasks[0]);
-    console.log(agents[0]);
 
     if (tasks.length === 0 || agents.length === 0) {
       return res.status(400).json({ message: "No tasks or agents available" });
@@ -122,6 +115,7 @@ const TaskAssign = async (req, res) => {
   }
 };
 
+// Function to get all assigned tasks with agent details
 const getAllTaskAssigned = async (req, res) => {
   try {
     const tasks = await Task.find({ agentId: { $ne: null } }).populate(
@@ -131,7 +125,7 @@ const getAllTaskAssigned = async (req, res) => {
 
     res
       .status(200)
-      .json({ success: true, message: "All assgigned Task", tasks });
+      .json({ success: true, message: "All assigned tasks", tasks });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -140,8 +134,7 @@ const getAllTaskAssigned = async (req, res) => {
 const getAllTask = async (req, res) => {
   try {
     const tasks = await Task.find({});
-
-    res.status(200).json({ success: true, message: "All  Task", tasks });
+    res.status(200).json({ success: true, message: "All tasks", tasks });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -154,3 +147,4 @@ module.exports = {
   getAllTaskAssigned,
   getAllTask,
 };
+

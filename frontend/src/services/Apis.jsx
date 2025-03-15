@@ -1,6 +1,6 @@
 // const BASE_URL = import.meta.env.VITE_BASE_URL;
 const BASE_URL = "https://agent-manger-vgju.vercel.app";
-
+// const BASE_URL = "http://localhost:5001";
 export const authEndpoits = {
   SIGNUP_API: `${BASE_URL}/api/auth/signUp`,
   SIGNIN_API: `${BASE_URL}/api/auth/login`,
